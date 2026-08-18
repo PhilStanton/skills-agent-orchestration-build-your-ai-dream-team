@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Project Pulse</h1>
+  </header>
+  <main>
+    <div id="message" role="status" aria-live="polite">Loading projects…</div>
+    <div class="dashboard" role="list" aria-label="Projects dashboard"></div>
+  </main>
+  <script>
+    (function(){
+      'use strict';
+      const dashboard = document.querySelector('.dashboard');
+      const messageEl = document.getElementById('message');
+
+      function formatDate(iso) {
+        try {
+          const d = new Date(iso);
+          if (isNaN(d)) return iso;
+          return d.toLocaleString();
+        } catch(e) {
+          return iso;
+        }
+      }
+
+      function createProjectCard(p, idx){
+        const card = document.createElement('article');
+        card.className = 'project-card';
+        card.setAttribute('role','listitem');
+        card.setAttribute('tabindex','0');
+        card.setAttribute('aria-label', `${p.name} project. Status: ${p.status}. Priority: ${p.priority}`);
+
+        const title = document.createElement('h2');
+        title.id = `project-${idx}-title`;
+        title.textContent = p.name;
+        card.appendChild(title);
+
+        const owner = document.createElement('p');
+        owner.className = 'owner';
+        const strong = document.createElement('strong');
+        strong.textContent = 'Owner: ';
+        owner.appendChild(strong);
+        owner.appendChild(document.createTextNode(p.owner));
+        card.appendChild(owner);
+
+        const meta = document.createElement('p');
+        meta.className = 'meta';
+        const status = document.createElement('span');
+        status.className = 'status-badge';
+        status.setAttribute('data-status', p.status);
+        status.textContent = p.status;
+        meta.appendChild(status);
+
+        const priority = document.createElement('span');
+        priority.className = 'priority';
+        priority.textContent = `Priority: ${p.priority}`;
+        meta.appendChild(priority);
+
+        card.appendChild(meta);
+
+        const recent = document.createElement('p');
+        recent.className = 'recent';
+        recent.textContent = 'Recent: ' + formatDate(p.recentActivity);
+        card.appendChild(recent);
+
+        return card;
+      }
+
+      fetch('project-data.json', {cache: 'no-cache'}).then(resp => {
+        if (!resp.ok) throw new Error('Network response was not ok (' + resp.status + ')');
+        return resp.json();
+      }).then(data => {
+        if (!data || !Array.isArray(data.projects)) throw new Error('Invalid project data');
+        messageEl.textContent = '';
+        if (data.projects.length === 0) {
+          messageEl.textContent = 'No projects to display.';
+          return;
+        }
+        data.projects.forEach((p, i) => {
+          const card = createProjectCard(p, i);
+          dashboard.appendChild(card);
+        });
+      }).catch(err => {
+        console.error(err);
+        messageEl.innerHTML = 'Failed to load project data. If you are opening this file directly, please run a local server (e.g. <code>python3 -m http.server</code>) and open <code>http://localhost:5500/index.html</code>.';
+      });
+
+    })();
+  </script>
+</body>
+</html>

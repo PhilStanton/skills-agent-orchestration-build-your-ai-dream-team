@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "name": "Aurora UI",
+      "owner": "Lena Park",
+      "status": "On Track",
+      "recentActivity": "2026-08-15T09:23:00Z",
+      "priority": "High"
+    },
+    {
+      "name": "Beacon API",
+      "owner": "Marco Diaz",
+      "status": "At Risk",
+      "recentActivity": "2026-08-16T14:12:34Z",
+      "priority": "High"
+    },
+    {
+      "name": "Cedar Analytics",
+      "owner": "Ravi Patel",
+      "status": "Blocked",
+      "recentActivity": "2026-08-12T08:45:00Z",
+      "priority": "Medium"
+    },
+    {
+      "name": "Dune Integrations",
+      "owner": "Amira Collins",
+      "status": "Complete",
+      "recentActivity": "2026-07-30T16:05:00Z",
+      "priority": "Low"
+    },
+    {
+      "name": "Echo Mobile",
+      "owner": "Samir Khan",
+      "status": "Delayed",
+      "recentActivity": "2026-08-17T11:00:00Z",
+      "priority": "Medium"
+    }
+  ]
+}
